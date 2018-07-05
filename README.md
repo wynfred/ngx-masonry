@@ -43,9 +43,9 @@ import { NgxMasonryModule } from 'ngx-masonry';
   selector: 'my-component',
   template: `
      <ngx-masonry>
-       <ngxMasonryItem class="masonry-item" *ngFor="let item of masonryItems">
+       <div ngxMasonryItem class="masonry-item" *ngFor="let item of masonryItems">
         {{item.title}}
-      </ngxMasonryItem>
+      </div>
      </ngx-masonry>
      `,
   styles: [
@@ -99,7 +99,7 @@ Inline object:
 From parent component:
 
 ```javascript
-import { NgxMasonryOptions } from 'ngx-masonry';;
+import { NgxMasonryOptions } from 'ngx-masonry';
 
 public myOptions: MasonryOptions = {
   transitionDuration: '0.8s'
