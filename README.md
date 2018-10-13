@@ -153,6 +153,28 @@ Triggered after an item element has been removed.
 
 > [http://masonry.desandro.com/events.html#removecomplete](http://masonry.desandro.com/events.html#removecomplete)
 
+### FAQ
+* Why is it rendering the tiles twice in prod?
+This could be the case because of angulars build optimizer. A currently working "workaround" is disabling the build-optimizer in the angular.json file.
+```json
+{
+  "projects": {
+    "my-project": {
+      "architect": {
+        "build": {
+            "production": {
+              "buildOptimizer": false
+            }
+          }
+        }
+    }
+  }
+}
+
+For more information refer to this issue:
+https://github.com/gethinoakes/ngx-masonry/issues/8
+```
+
 ### Examples
 
 ```html
