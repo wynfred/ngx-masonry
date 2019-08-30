@@ -126,7 +126,9 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
         }
       });
 
-      this._element.nativeElement.removeChild(element);
+			if (this.isParent(element, this._element.nativeElement)) {
+				this._element.nativeElement.removeChild(element);
+			}
     } else {
       // Tell Masonry that a child element has been added
       this._msnry.appended(element);
@@ -137,6 +139,16 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+	
+	public isParent (obj, parentObj){
+		while (obj != undefined && obj != null && obj.tagName.toUpperCase() != 'BODY'){
+				if (obj == parentObj){
+						return true;
+				}
+				obj = obj.parentNode;
+		}
+		return false;
+	}
 
   public remove(element: HTMLElement) {
     // Tell Masonry that a child element has been removed
