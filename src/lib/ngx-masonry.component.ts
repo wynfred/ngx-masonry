@@ -14,7 +14,6 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 
 declare var require: any;
-let imagesLoaded: any;
 let masonryConstructor: any;
 
 import { NgxMasonryOptions } from './ngx-masonry-options';
@@ -37,7 +36,6 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 
   // Inputs
   @Input() public options: NgxMasonryOptions;
-  @Input() public useImagesLoaded: Boolean = false;
   @Input() updateLayout: Boolean = false;
 
   // Outputs
@@ -45,9 +43,6 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   @Output() removeComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   ngOnInit() {
-    if (this.useImagesLoaded && imagesLoaded === undefined) {
-      imagesLoaded = require('imagesloaded');
-    }
 
     if (isPlatformBrowser(this.platformId) && masonryConstructor === undefined) {
       masonryConstructor = require('masonry-layout');
@@ -113,21 +108,6 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       isFirstItem = true;
     }
 
-    if (this.useImagesLoaded) {
-      imagesLoaded(element, (instance: any) => {
-        this._element.nativeElement.appendChild(element);
-
-        // Tell Masonry that a child element has been added
-        this._msnry.appended(element);
-
-        // layout if first item
-        if (isFirstItem) {
-          this.layout();
-        }
-      });
-
-      this._element.nativeElement.removeChild(element);
-    } else {
       // Tell Masonry that a child element has been added
       this._msnry.appended(element);
 
@@ -135,7 +115,6 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       if (isFirstItem) {
         this.layout();
       }
-    }
   }
 
   public remove(element: HTMLElement) {

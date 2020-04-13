@@ -1,9 +1,7 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-masonry",
-  "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/public_api.ts"
-  },
-  "whitelistedNonPeerDependencies": ["masonry-layout", "imagesloaded"]
+    "entryFile": "src/public-api.ts"
+  }
 }

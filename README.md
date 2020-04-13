@@ -4,13 +4,11 @@ This package was originally a fork from [https://github.com/jelgblad/angular2-ma
 
 This updated version is also compatible with Angular Universal server side rendering (SSR)
 
-**If I have the time I will look into further improvements, but please do not expect support as I don't have the time for that**.
-
 [![npm version](https://badge.fury.io/js/ngx-masonry.svg)](https://www.npmjs.com/package/ngx-masonry)
 
 ## Installation
 
-`npm install ngx-masonry --save`
+`npm install ngx-masonry masonry-layout --save`
 
 If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
 
@@ -112,22 +110,7 @@ public myOptions: MasonryOptions = {
 
 ### imagesLoaded
 
-> **NOTE:** Will throw error if global `imagesLoaded` not available.
-
-Delay adding brick until all images in brick are loaded.
-To activate imagesLoaded set `useImagesLoaded` to `true`.
-
-```html
-<ngx-masonry [useImagesLoaded]="true"></ngx-masonry>
-```
-
-index.html:
-
-```html
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-```
-
-check the [ImagesLoaded](https://imagesloaded.desandro.com/) website for the latest version.
+imagesLoaded is removed in V9. masonry item will support image by default
 
 ### updateLayout
 
@@ -154,8 +137,19 @@ Triggered after an item element has been removed.
 > [http://masonry.desandro.com/events.html#removecomplete](http://masonry.desandro.com/events.html#removecomplete)
 
 ### FAQ
+* Why does masonry have wrong order?
+The new item is always appended to the list because there is no "insert" function supported in masonry-layout. If the order changed and you want to update the order of items, use `reloadItems()`
+```javascript
+// get reference
+@ViewChild(NgxMasonryComponent, {static: false}) masonry: NgxMasonryComponent;
+
+// after the order of items has changed
+this.masonry.reloadItems();
+this.masonry.layout();
+```
+
 * Why is it rendering the tiles twice in prod?
-This could be the case because of angulars build optimizer. A currently working "workaround" is disabling the build-optimizer in the angular.json file.
+This could be the case because of angular build optimizer. A currently working "workaround" is disabling the build-optimizer in the angular.json file.
 ```json
 {
   "projects": {
@@ -172,7 +166,7 @@ This could be the case because of angulars build optimizer. A currently working 
 }
 
 For more information refer to this issue:
-https://github.com/gethinoakes/ngx-masonry/issues/8
+https://github.com/wynfred/ngx-masonry/issues/8
 ```
 
 ### Examples
@@ -183,6 +177,6 @@ https://github.com/gethinoakes/ngx-masonry/issues/8
 
 ## Demo
 
-This repository contains a working app using ngx-masonry as a child module, not as an npm package. You can go to the [demo respository](https://github.com/gethinoakes/ngx-masonry-demo) to view an app that uses it as an npm package.
+This repository contains a working app using ngx-masonry as a child module, not as an npm package. You can go to the [demo respository](https://github.com/wynfred/ngx-masonry-demo) to view an app that uses it as an npm package.
 
 [View a live demo here](https://ngx-masonry-demo.herokuapp.com/)
