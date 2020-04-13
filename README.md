@@ -6,6 +6,12 @@ This updated version is also compatible with Angular Universal server side rende
 
 [![npm version](https://badge.fury.io/js/ngx-masonry.svg)](https://www.npmjs.com/package/ngx-masonry)
 
+### V9 beta
+- update the version number to match angular version
+- `masonry-layout` is now a peerDependency, not a dependency
+- expose `reloadItems()` function
+- remove `imagesLoaded` and support images loading by default
+
 ## Installation
 
 `npm install ngx-masonry masonry-layout --save`
@@ -138,6 +144,7 @@ Triggered after an item element has been removed.
 
 ### FAQ
 * Why does masonry have wrong order?
+
 The new item is always appended to the list because there is no "insert" function supported in masonry-layout. If the order changed and you want to update the order of items, use `reloadItems()`
 ```javascript
 // get reference
@@ -149,6 +156,7 @@ this.masonry.layout();
 ```
 
 * Why is it rendering the tiles twice in prod?
+
 This could be the case because of angular build optimizer. A currently working "workaround" is disabling the build-optimizer in the angular.json file.
 ```json
 {
