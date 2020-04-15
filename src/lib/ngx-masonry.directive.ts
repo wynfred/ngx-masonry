@@ -40,7 +40,7 @@ export class NgxMasonryDirective implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    if (this.images.size === 0) {
+    if (this.images.size === 0 && this.element.nativeElement.parentNode) {
       this.parent.remove(this.element.nativeElement);
     }
   }
@@ -59,7 +59,7 @@ export class NgxMasonryDirective implements OnDestroy, AfterViewInit {
     if (MutationObserver) {
       /** Watch for any changes to subtree */
       const self = this;
-      const observer = new MutationObserver(function(mutations, observerFromElement) {
+      const observer = new MutationObserver((mutations, observerFromElement) => {
         self.parent.layout();
       });
 

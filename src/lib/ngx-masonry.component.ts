@@ -101,20 +101,13 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 
   // public add(element: HTMLElement, prepend: boolean = false) {
   public add(element: HTMLElement) {
-    let isFirstItem = false;
+    // Tell Masonry that a child element has been added
+    this._msnry.appended(element);
 
     // Check if first item
-    if (this._msnry.items.length === 0) {
-      isFirstItem = true;
+    if (this._msnry.items.length === 1) {
+      this._msnry.layout();
     }
-
-      // Tell Masonry that a child element has been added
-      this._msnry.appended(element);
-
-      // layout if first item
-      if (isFirstItem) {
-        this.layout();
-      }
   }
 
   public remove(element: HTMLElement) {
