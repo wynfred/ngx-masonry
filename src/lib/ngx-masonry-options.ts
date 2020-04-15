@@ -1,3 +1,5 @@
+import { AnimationMetadata } from '@angular/animations';
+
 export interface NgxMasonryOptions {
   itemSelector?: string;
   columnWidth?: number | string;
@@ -8,8 +10,13 @@ export interface NgxMasonryOptions {
   originLeft?: boolean;
   originTop?: boolean;
   containerStyle?: string;
-  transitionDuration?: string;
   resize?: boolean;
   initLayout?: boolean;
   horizontalOrder?: boolean;
+  animations?: NgxMasonryAnimations;
+}
+
+export interface NgxMasonryAnimations {
+  show?: AnimationMetadata[];
+  hide?: AnimationMetadata[];
 }

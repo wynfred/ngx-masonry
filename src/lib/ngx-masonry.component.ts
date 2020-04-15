@@ -32,11 +32,11 @@ import { NgxMasonryOptions } from './ngx-masonry-options';
 export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   constructor(@Inject(PLATFORM_ID) private platformId: any, private _element: ElementRef) {}
 
-  public _msnry: any;
+  public masonryInstance: any;
 
   // Inputs
   @Input() public options: NgxMasonryOptions;
-  @Input() updateLayout: Boolean = false;
+  @Input() updateLayout = false;
 
   // Outputs
   @Output() layoutComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -58,15 +58,17 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       this.options.itemSelector = '[ngxMasonryItem], ngxMasonryItem';
     }
 
+    this.options['transitionDuration'] = '0s'
+
     if (isPlatformBrowser(this.platformId)) {
       // Initialize Masonry
-      this._msnry = new masonryConstructor(this._element.nativeElement, this.options);
+      this.masonryInstance = new masonryConstructor(this._element.nativeElement, this.options);
 
       // Bind to events
-      this._msnry.on('layoutComplete', (items: any) => {
+      this.masonryInstance.on('layoutComplete', (items: any) => {
         this.layoutComplete.emit(items);
       });
-      this._msnry.on('removeComplete', (items: any) => {
+      this.masonryInstance.on('removeComplete', (items: any) => {
         this.removeComplete.emit(items);
       });
     }
@@ -82,37 +84,37 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this._msnry) {
-      this._msnry.destroy();
+    if (this.masonryInstance) {
+      this.masonryInstance.destroy();
     }
   }
 
   public layout() {
     setTimeout(() => {
-      this._msnry.layout();
+      this.masonryInstance.layout();
     });
   }
 
   public reloadItems() {
     setTimeout(() => {
-      this._msnry.reloadItems();
+      this.masonryInstance.reloadItems();
     });
   }
 
   // public add(element: HTMLElement, prepend: boolean = false) {
   public add(element: HTMLElement) {
     // Tell Masonry that a child element has been added
-    this._msnry.appended(element);
+    this.masonryInstance.appended(element);
 
     // Check if first item
-    if (this._msnry.items.length === 1) {
-      this._msnry.layout();
+    if (this.masonryInstance.items.length === 1) {
+      this.masonryInstance.layout();
     }
   }
 
   public remove(element: HTMLElement) {
     // Tell Masonry that a child element has been removed
-    this._msnry.remove(element);
+    this.masonryInstance.remove(element);
 
     // Layout items
     this.layout();

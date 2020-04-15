@@ -11,22 +11,13 @@ This updated version is also compatible with Angular Universal server side rende
 - `masonry-layout` is now a peerDependency, not a dependency
 - expose `reloadItems()` function
 - remove `imagesLoaded` and support images loading by default
+- option `transitionDuration` was removed
+- use angular animation and support customized animations
+- html watcher was removed for better performance. Users need to have their own listener and call `layout()` when certain events are triggered
 
 ## Installation
 
 `npm install ngx-masonry masonry-layout --save`
-
-If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
-
-```json
-packages: {
-  "ngx-masonry": { "defaultExtension": "js", "main": "index" }
-},
-map: {
-  "ngx-masonry": "node_modules/ngx-masonry",
-  "masonry-layout": "node_modules/masonry-layout/dist/masonry.pkgd.js"
-}
-```
 
 ## Usage
 
@@ -36,9 +27,7 @@ Import `NgxMasonryModule` into your app's modules:
 import { NgxMasonryModule } from 'ngx-masonry';
 
 @NgModule({
-  imports: [
-    NgxMasonryModule
-  ]
+  imports: [NgxMasonryModule]
 })
 ```
 
@@ -54,8 +43,8 @@ import { NgxMasonryModule } from 'ngx-masonry';
      `,
   styles: [
     `
-       .masonry-item { width: 200px; }
-     `
+      .masonry-item { width: 200px; }
+    `
   ]
 })
 class MyComponent {
@@ -63,9 +52,6 @@ class MyComponent {
     { title: 'item 1' },
     { title: 'item 2' },
     { title: 'item 3' },
-    { title: 'item 4' },
-    { title: 'item 5' },
-    { title: 'item 6' }
   ];
 }
 ```
@@ -87,26 +73,26 @@ The `options`-attribute takes an object with the following properties:
 * originLeft: boolean;
 * originTop: boolean;
 * containerStyle: string;
-* transitionDuration: string;
 * resize: boolean;
 * initLayout: boolean;
 * horizontalOrder: boolean;
+* animations: NgxMasonryAnimations;
 
 #### Examples
 
 Inline object:
 
 ```html
-<ngx-masonry [options]="{ transitionDuration: '0.8s' }"></ngx-masonry>
+<ngx-masonry [options]="{ gutter: 10 }"></ngx-masonry>
 ```
 
 From parent component:
 
-```javascript
+```typescript
 import { NgxMasonryOptions } from 'ngx-masonry';
 
 public myOptions: MasonryOptions = {
-  transitionDuration: '0.8s'
+  gutter: 10
 };
 ```
 
@@ -128,6 +114,26 @@ ngx-masonry has an input property, `updateLayout`, which accepts a boolean and w
 
 When `updateMasonryLayout` is updated, the `layout()` method will be called.
 
+### animations
+
+You can create and set customized animations with this option.
+
+```typescript
+  animations = {
+    show: [
+      style({opacity: 0}),
+      animate('400ms ease-in', style({opacity: 1})),
+    ],
+    hide: [
+      style({opacity: '*'}),
+      animate('400ms ease-in', style({opacity: 0})),
+    ]
+  }
+
+  // To disable animation
+  animations = {}
+```
+
 ## Events
 
 ### layoutComplete: `EventEmitter<any[]>`
@@ -142,45 +148,45 @@ Triggered after an item element has been removed.
 
 > [http://masonry.desandro.com/events.html#removecomplete](http://masonry.desandro.com/events.html#removecomplete)
 
-### FAQ
+### Examples
+
+```html
+<ngx-masonry (layoutComplete)="doStuff($event)" (removeComplete)="doOtherStuff($event)"></ngx-masonry>
+```
+
+## FAQ
 * Why does masonry have wrong order?
 
 The new item is always appended to the list because there is no "insert" function supported in masonry-layout. If the order changed and you want to update the order of items, use `reloadItems()`
-```javascript
+```typescript
 // get reference
-@ViewChild(NgxMasonryComponent, {static: false}) masonry: NgxMasonryComponent;
+@ViewChild(NgxMasonryComponent) masonry: NgxMasonryComponent;
 
 // after the order of items has changed
 this.masonry.reloadItems();
 this.masonry.layout();
 ```
 
-* Why is it rendering the tiles twice in prod?
+* Why is the transitionDuration option not supported?
 
-This could be the case because of angular build optimizer. A currently working "workaround" is disabling the build-optimizer in the angular.json file.
-```json
-{
-  "projects": {
-    "my-project": {
-      "architect": {
-        "build": {
-            "production": {
-              "buildOptimizer": false
-            }
-          }
-        }
-    }
-  }
-}
+The builtin animation of masonry-layout doesn't work with angular well.
 
 For more information refer to this issue:
+
 https://github.com/wynfred/ngx-masonry/issues/8
-```
 
-### Examples
+* How to setup if I use SystemJS?
 
-```html
-<ngx-masonry (layoutComplete)="doStuff($event)" (removeComplete)="doOtherStuff($event)"></ngx-masonry>
+If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
+
+```json
+packages: {
+  "ngx-masonry": { "defaultExtension": "js", "main": "index" }
+},
+map: {
+  "ngx-masonry": "node_modules/ngx-masonry",
+  "masonry-layout": "node_modules/masonry-layout/dist/masonry.pkgd.js"
+}
 ```
 
 ## Demo
