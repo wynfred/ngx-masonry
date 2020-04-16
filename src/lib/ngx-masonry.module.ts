@@ -4,7 +4,7 @@ import { NgxMasonryComponent } from './ngx-masonry.component';
 import { NgxMasonryDirective } from './ngx-masonry.directive';
 
 @NgModule({
-  imports: [BrowserAnimationsModule],
+  imports: [],
   declarations: [NgxMasonryComponent, NgxMasonryDirective],
   exports: [NgxMasonryComponent, NgxMasonryDirective]
 })
