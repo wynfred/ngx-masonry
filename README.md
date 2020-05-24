@@ -14,6 +14,7 @@ This updated version is also compatible with Angular Universal server side rende
 - option `transitionDuration` was removed
 - use angular animation and support customized animations
 - html watcher was removed for better performance. Users need to have their own listener and call `layout()` when certain events are triggered
+- support prepend item
 
 ## Installation
 
@@ -155,9 +156,11 @@ Triggered after an item element has been removed.
 ```
 
 ## FAQ
-* Why does masonry have wrong order?
+
+- Why does masonry have wrong order?
 
 The new item is always appended to the list because there is no "insert" function supported in masonry-layout. If the order changed and you want to update the order of items, use `reloadItems()`
+
 ```typescript
 // get reference
 @ViewChild(NgxMasonryComponent) masonry: NgxMasonryComponent;
@@ -167,7 +170,7 @@ this.masonry.reloadItems();
 this.masonry.layout();
 ```
 
-* Why is the transitionDuration option not supported?
+- Why is the transitionDuration option not supported?
 
 The builtin animation of masonry-layout doesn't work with angular well.
 
@@ -175,7 +178,7 @@ For more information refer to this issue:
 
 https://github.com/wynfred/ngx-masonry/issues/8
 
-* How to setup if I use SystemJS?
+- How to setup if I use SystemJS?
 
 If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
 

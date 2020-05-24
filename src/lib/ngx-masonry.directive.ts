@@ -1,4 +1,4 @@
-import { Directive, Inject, ElementRef, forwardRef, OnDestroy, AfterViewInit, Renderer2, OnInit } from '@angular/core';
+import { Directive, Inject, ElementRef, forwardRef, OnDestroy, AfterViewInit, Renderer2, OnInit, Input } from '@angular/core';
 import { style, animate, AnimationBuilder } from '@angular/animations';
 
 import { NgxMasonryComponent } from './ngx-masonry.component';
@@ -8,6 +8,7 @@ import { NgxMasonryAnimations } from './ngx-masonry-options';
   selector: '[ngxMasonryItem], ngxMasonryItem'
 })
 export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
+  @Input() prepend = false;
   private images: Set<HTMLImageElement>;
 
   private animations: NgxMasonryAnimations = {
@@ -39,7 +40,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setStyle(this.element.nativeElement, 'opacity', '0');
     this.images = new Set(images);
     if (images.length === 0) {
-      this.parent.add(this.element.nativeElement);
+      this.parent.add(this.element.nativeElement, this.prepend);
     } else {
       for (const imageRef of images) {
         this.renderer.listen(imageRef, 'load', _ => {
@@ -63,7 +64,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     this.images.delete(image);
     if (this.images.size === 0) {
       this.renderer.setStyle(this.element.nativeElement, 'opacity', '100');
-      this.parent.add(this.element.nativeElement);
+      this.parent.add(this.element.nativeElement, this.prepend);
       this.playAnimation(true);
     }
   }
