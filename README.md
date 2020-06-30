@@ -6,16 +6,6 @@ This updated version is also compatible with Angular Universal server side rende
 
 [![npm version](https://badge.fury.io/js/ngx-masonry.svg)](https://www.npmjs.com/package/ngx-masonry)
 
-### V9 beta
-- update the version number to match angular version
-- `masonry-layout` is now a peerDependency, not a dependency
-- expose `reloadItems()` function
-- remove `imagesLoaded` and support images loading by default
-- option `transitionDuration` was removed
-- use angular animation and support customized animations
-- html watcher was removed for better performance. Users need to have their own listener and call `layout()` when certain events are triggered
-- support prepend item
-
 ## Installation
 
 `npm install ngx-masonry masonry-layout --save`
