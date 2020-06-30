@@ -9,8 +9,8 @@ import { NgxMasonryAnimations } from './ngx-masonry-options';
 })
 export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   @Input() prepend = false;
-  private images: Set<HTMLImageElement>;
 
+  public images: Set<HTMLImageElement>;
   private animations: NgxMasonryAnimations = {
     show: [
       style({opacity: 0}),
@@ -23,8 +23,8 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   constructor(
+    public element: ElementRef,
     private builder: AnimationBuilder,
-    private element: ElementRef,
     @Inject(forwardRef(() => NgxMasonryComponent)) private parent: NgxMasonryComponent,
     private renderer: Renderer2,
   ) {}
@@ -33,6 +33,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     if (this.parent.options.animations !== undefined) {
       this.animations = this.parent.options.animations;
     }
+    this.parent.addPendingItem(this);
   }
 
   ngAfterViewInit() {
@@ -40,7 +41,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     this.renderer.setStyle(this.element.nativeElement, 'opacity', '0');
     this.images = new Set(images);
     if (images.length === 0) {
-      this.parent.add(this.element.nativeElement, this.prepend);
+      this.parent.add(this);
     } else {
       for (const imageRef of images) {
         this.renderer.listen(imageRef, 'load', _ => {
@@ -63,13 +64,11 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   private imageLoaded(image?: HTMLImageElement) {
     this.images.delete(image);
     if (this.images.size === 0) {
-      this.renderer.setStyle(this.element.nativeElement, 'opacity', '100');
-      this.parent.add(this.element.nativeElement, this.prepend);
-      this.playAnimation(true);
+      this.parent.add(this);
     }
   }
 
-  private playAnimation(show: boolean) {
+  public playAnimation(show: boolean) {
     const metadata = show ? this.animations.show : this.animations.hide;
     if (metadata) {
       const player = this.builder.build(metadata).create(this.element.nativeElement);

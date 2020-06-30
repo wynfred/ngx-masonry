@@ -1,8 +1,9 @@
 # Change log
 
-## 10.0.0
+## 10.0.0 beta
 
 - update to Angular 10
+- support synchronous loading
 
 ## 9.X
 

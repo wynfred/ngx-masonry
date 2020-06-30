@@ -17,6 +17,7 @@ declare var require: any;
 let masonryConstructor: any;
 
 import { NgxMasonryOptions } from './ngx-masonry-options';
+import { NgxMasonryDirective } from './ngx-masonry.directive';
 
 @Component({
   selector: '[ngx-masonry], ngx-masonry',
@@ -37,10 +38,13 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   // Inputs
   @Input() public options: NgxMasonryOptions;
   @Input() updateLayout = false;
+  @Input() ordered = false;
 
   // Outputs
   @Output() layoutComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() removeComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
+
+  private pendingItems = [];
 
   ngOnInit() {
 
@@ -58,7 +62,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       this.options.itemSelector = '[ngxMasonryItem], ngxMasonryItem';
     }
 
-    this.options['transitionDuration'] = '0s'
+    this.options['transitionDuration'] = '0s';
 
     if (isPlatformBrowser(this.platformId)) {
       // Initialize Masonry
@@ -101,18 +105,40 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  public add(element: HTMLElement, prepend: boolean = false) {
-    // Tell Masonry that a child element has been added
-    if (prepend) {
-      this.masonryInstance.prepended(element);
+  public addPendingItem(item: NgxMasonryDirective) {
+    this.pendingItems.push(item);
+  }
+
+  public add(newItem: NgxMasonryDirective) {
+    if (this.ordered) {
+      for (const [index, item] of this.pendingItems.entries()) {
+        if (item) {
+          if (item.images.size === 0) {
+            this.pendingItems[index] = undefined;
+            this.itemLoaded(item);
+          } else {
+            return;
+          }
+        }
+      }
     } else {
-      this.masonryInstance.appended(element);
+      this.itemLoaded(newItem);
+    }
+  }
+
+  private itemLoaded(item: NgxMasonryDirective) {
+    // Tell Masonry that a child element has been added
+    if (item.prepend) {
+      this.masonryInstance.prepended(item.element.nativeElement);
+    } else {
+      this.masonryInstance.appended(item.element.nativeElement);
     }
 
     // Check if first item
     if (this.masonryInstance.items.length === 1) {
       this.masonryInstance.layout();
     }
+    item.playAnimation(true);
   }
 
   public remove(element: HTMLElement) {

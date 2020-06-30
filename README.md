@@ -49,6 +49,14 @@ class MyComponent {
 
 ## Configuration
 
+### Ordered
+
+Append new items synchronously. The order of the items will be preserved, but one image in the middle will block the reset of the images.
+
+```typescript
+<ngx-masonry [options]="masonryOptions" [ordered]="true">
+```
+
 ### Options
 
 Read about Masonry options here: [Masonry Options](http://masonry.desandro.com/options.html)
@@ -90,10 +98,6 @@ public myOptions: MasonryOptions = {
 ```html
 <ngx-masonry [options]="myOptions"></ngx-masonry>
 ```
-
-### imagesLoaded
-
-imagesLoaded is removed in V9. masonry item will support image by default
 
 ### updateLayout
 
@@ -147,40 +151,51 @@ Triggered after an item element has been removed.
 
 ## FAQ
 
-- Why does masonry have wrong order?
+* How to maintain the order of items if there are images?
 
-The new item is always appended to the list because there is no "insert" function supported in masonry-layout. If the order changed and you want to update the order of items, use `reloadItems()`
+  * Set `[ordered]` to true.
+  * To insert item at the beginning: prepend the item to the array **and** set `prepend` to true.
 
-```typescript
-// get reference
-@ViewChild(NgxMasonryComponent) masonry: NgxMasonryComponent;
+    ```typescript
+    <div ngxMasonryItem [prepend]="image.prepend" *ngFor="let image of masonryImages">
+    ```
 
-// after the order of items has changed
-this.masonry.reloadItems();
-this.masonry.layout();
-```
+  * If item is inserted or the list is shuffled, use `reloadItems()`
 
-- Why is the transitionDuration option not supported?
+    ```typescript
+    // get reference
+    @ViewChild(NgxMasonryComponent) masonry: NgxMasonryComponent;
 
-The builtin animation of masonry-layout doesn't work with angular well.
+    // after the order of items has changed
+    this.masonry.reloadItems();
+    this.masonry.layout();
+    ```
 
-For more information refer to this issue:
+* Why is the transitionDuration option not supported?
 
-https://github.com/wynfred/ngx-masonry/issues/8
+  The builtin animation of masonry-layout doesn't work with angular well.
 
-- How to setup if I use SystemJS?
+  For more information refer to this issue:
 
-If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
+  https://github.com/wynfred/ngx-masonry/issues/8
 
-```json
-packages: {
-  "ngx-masonry": { "defaultExtension": "js", "main": "index" }
-},
-map: {
-  "ngx-masonry": "node_modules/ngx-masonry",
-  "masonry-layout": "node_modules/masonry-layout/dist/masonry.pkgd.js"
-}
-```
+* How to setup if I use SystemJS?
+
+  If you're using SystemJS add `ngx-masonry` and `masonry-layout` to your configuration:
+
+  ```json
+  packages: {
+    "ngx-masonry": { "defaultExtension": "js", "main": "index" }
+  },
+  map: {
+    "ngx-masonry": "node_modules/ngx-masonry",
+    "masonry-layout": "node_modules/masonry-layout/dist/masonry.pkgd.js"
+  }
+  ```
+
+* Where is imagesLoaded?
+
+  imagesLoaded is removed in V9. masonry item will support image by default
 
 ## Demo
 
