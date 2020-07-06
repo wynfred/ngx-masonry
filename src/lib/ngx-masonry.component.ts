@@ -43,6 +43,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   // Outputs
   @Output() layoutComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() removeComplete: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() itemsLoaded: EventEmitter<number> = new EventEmitter<number>();
 
   private pendingItems = [];
 
@@ -116,6 +117,11 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
           if (item.images.size === 0) {
             this.pendingItems[index] = undefined;
             this.itemLoaded(item);
+            if (index + 1 === this.pendingItems.length) {
+              // All items are loaded
+              this.itemsLoaded.emit(this.pendingItems.length);
+              this.pendingItems = [];
+            }
           } else {
             return;
           }

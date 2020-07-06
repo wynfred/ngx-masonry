@@ -143,6 +143,10 @@ Triggered after an item element has been removed.
 
 > [http://masonry.desandro.com/events.html#removecomplete](http://masonry.desandro.com/events.html#removecomplete)
 
+### itemsLoaded: `EventEmitter<number>`
+
+Should only be used with `ordered` mode. Triggered after the last item is loaded.
+
 ### Examples
 
 ```html

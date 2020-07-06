@@ -33,15 +33,18 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     if (this.parent.options.animations !== undefined) {
       this.animations = this.parent.options.animations;
     }
+    this.renderer.setStyle(this.element.nativeElement, 'position', 'fixed');
+    this.renderer.setStyle(this.element.nativeElement, 'right', '-150vw');
     this.parent.addPendingItem(this);
   }
 
   ngAfterViewInit() {
     const images = this.element.nativeElement.getElementsByTagName('img');
-    this.renderer.setStyle(this.element.nativeElement, 'opacity', '0');
     this.images = new Set(images);
     if (images.length === 0) {
-      this.parent.add(this);
+      setTimeout(() => {
+        this.parent.add(this);
+      });
     } else {
       for (const imageRef of images) {
         this.renderer.listen(imageRef, 'load', _ => {

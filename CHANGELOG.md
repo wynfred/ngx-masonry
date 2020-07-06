@@ -1,5 +1,18 @@
 # Change log
 
+## 10.0.3
+
+- move item outside of the viewport instead of using opacity and z-index
+
+## 10.0.2
+
+- delay the event when there is no image
+- set z-index to -1 when item is not loaded
+
+## 10.0.1
+
+- emit event when all of the items are loaded
+
 ## 10.0.0 beta
 
 - update to Angular 10
