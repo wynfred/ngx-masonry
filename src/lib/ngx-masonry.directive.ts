@@ -40,12 +40,12 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     const images = this.element.nativeElement.getElementsByTagName('img');
-    this.images = new Set(images);
     if (images.length === 0) {
       setTimeout(() => {
         this.parent.add(this);
       });
     } else {
+      this.images = new Set(images);
       for (const imageRef of images) {
         this.renderer.listen(imageRef, 'load', _ => {
           this.imageLoaded(imageRef);
@@ -58,7 +58,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    if (this.images.size === 0 && this.element.nativeElement.parentNode) {
+    if (this.images && this.images.size === 0 && this.element.nativeElement.parentNode) {
       this.playAnimation(false);
       this.parent.remove(this.element.nativeElement);
     }

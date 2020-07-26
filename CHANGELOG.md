@@ -1,5 +1,9 @@
 # Change log
 
+## 10.0.4
+
+- fix error in SSR
+
 ## 10.0.3
 
 - move item outside of the viewport instead of using opacity and z-index
