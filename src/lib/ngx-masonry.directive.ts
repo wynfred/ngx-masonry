@@ -39,7 +39,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const images = this.element.nativeElement.getElementsByTagName('img');
+    const images = Array.from(this.element.nativeElement.getElementsByTagName('img'));
     if (images.length === 0) {
       setTimeout(() => {
         this.parent.add(this);
