@@ -1,5 +1,13 @@
 # Change log
 
+## 10.0.6
+
+- fix object not iterable in SSR
+
+## 10.0.5
+
+- add missing null check
+
 ## 10.0.4
 
 - fix error in SSR

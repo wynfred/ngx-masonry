@@ -20,7 +20,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
       style({opacity: '*'}),
       animate('400ms ease-in', style({opacity: 0})),
     ]
-  }
+  };
 
   constructor(
     public element: ElementRef,
@@ -39,7 +39,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const images = Array.from(this.element.nativeElement.getElementsByTagName('img'));
+    const images: HTMLImageElement[] = Array.from(this.element.nativeElement.getElementsByTagName('img'));
     if (images.length === 0) {
       setTimeout(() => {
         this.parent.add(this);
