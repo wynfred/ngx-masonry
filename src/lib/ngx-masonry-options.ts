@@ -13,6 +13,7 @@ export interface NgxMasonryOptions {
   resize?: boolean;
   initLayout?: boolean;
   horizontalOrder?: boolean;
+  detectImageLoad?: boolean;
   animations?: NgxMasonryAnimations;
 }
 

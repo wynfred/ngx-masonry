@@ -76,6 +76,7 @@ The `options`-attribute takes an object with the following properties:
 * initLayout: boolean;
 * horizontalOrder: boolean;
 * animations: NgxMasonryAnimations;
+* [detectImageLoad: boolean;](#lazyload--non-image-layout)
 
 #### Examples
 
@@ -128,6 +129,12 @@ You can create and set customized animations with this option.
   // To disable animation
   animations = {}
 ```
+
+### Lazyload & Non-image Layout
+
+When using any lazyload methods or a non-image layout, you can have `detectImageLoad: false` as one of the masonry options. `detectImageLoad: true` by default.
+
+Note: When `detectImageLoad` is turned off, each item may have an overlapping issue. If you have this issue, you would need a custom method to maintain the layout, such as adding the fixed width/height to each item or the parent containers. For using the image lazyload method, you can have fallback image and loading indicator is recommended.
 
 ## Events
 

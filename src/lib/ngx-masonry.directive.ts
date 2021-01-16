@@ -11,6 +11,7 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   @Input() prepend = false;
 
   public images: Set<HTMLImageElement>;
+  private detectImageLoad: boolean = true;
   private animations: NgxMasonryAnimations = {
     show: [
       style({opacity: 0}),
@@ -33,6 +34,9 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     if (this.parent.options.animations !== undefined) {
       this.animations = this.parent.options.animations;
     }
+    if (this.parent.options.detectImageLoad === undefined) {
+      this.parent.options.detectImageLoad = this.detectImageLoad;
+    }
     this.renderer.setStyle(this.element.nativeElement, 'position', 'fixed');
     this.renderer.setStyle(this.element.nativeElement, 'right', '-150vw');
     this.parent.addPendingItem(this);
@@ -47,12 +51,16 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.images = new Set(images);
       for (const imageRef of images) {
-        this.renderer.listen(imageRef, 'load', _ => {
+        if (!this.parent.options.detectImageLoad) { 
           this.imageLoaded(imageRef);
-        });
-        this.renderer.listen(imageRef, 'error', _ => {
-          this.imageLoaded(imageRef);
-        });
+        } else {
+          this.renderer.listen(imageRef, 'load', _ => {
+            this.imageLoaded(imageRef);
+          });
+          this.renderer.listen(imageRef, 'error', _ => {
+            this.imageLoaded(imageRef);
+          });
+        }
       }
     }
   }
