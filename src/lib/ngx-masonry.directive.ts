@@ -10,7 +10,8 @@ import { NgxMasonryAnimations } from './ngx-masonry-options';
 export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   @Input() prepend = false;
 
-  public images: Set<HTMLImageElement>;
+  public elements: Set<HTMLImageElement | HTMLElement>;
+  private selectedElements: HTMLImageElement[] | HTMLElement[];
   private detectImageLoad: boolean = true;
   private animations: NgxMasonryAnimations = {
     show: [
@@ -43,22 +44,28 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const images: HTMLImageElement[] = Array.from(this.element.nativeElement.getElementsByTagName('img'));
-    if (images.length === 0) {
+    // image lazyload or non-image support by selecting `itemSelector`
+    // image support by default
+    this.selectedElements = !this.parent.options.detectImageLoad
+      ? (this.selectedElements = this.element.nativeElement.innerHTML)
+      : Array.from(this.element.nativeElement.getElementsByTagName('img'));
+
+    if (this.selectedElements.length === 0) {
       setTimeout(() => {
         this.parent.add(this);
       });
     } else {
-      this.images = new Set(images);
-      for (const imageRef of images) {
-        if (!this.parent.options.detectImageLoad) { 
-          this.imageLoaded(imageRef);
+      this.elements = new Set(this.selectedElements);
+
+      for (const selectedElementRef of this.selectedElements) {
+        if (!this.parent.options.detectImageLoad) {
+          this.elementLoaded(selectedElementRef);
         } else {
-          this.renderer.listen(imageRef, 'load', _ => {
-            this.imageLoaded(imageRef);
+          this.renderer.listen(selectedElementRef, 'load', (_) => {
+            this.elementLoaded(selectedElementRef);
           });
-          this.renderer.listen(imageRef, 'error', _ => {
-            this.imageLoaded(imageRef);
+          this.renderer.listen(selectedElementRef, 'error', (_) => {
+            this.elementLoaded(selectedElementRef);
           });
         }
       }
@@ -66,15 +73,19 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    if (this.images && this.images.size === 0 && this.element.nativeElement.parentNode) {
+    if (
+      this.elements &&
+      this.elements.size === 0 &&
+      this.element.nativeElement.parentNode
+    ) {
       this.playAnimation(false);
       this.parent.remove(this.element.nativeElement);
     }
   }
 
-  private imageLoaded(image?: HTMLImageElement) {
-    this.images.delete(image);
-    if (this.images.size === 0) {
+  private elementLoaded(item?: HTMLImageElement | HTMLElement) {
+    this.elements.delete(item);
+    if (this.elements.size === 0) {
       this.parent.add(this);
     }
   }
