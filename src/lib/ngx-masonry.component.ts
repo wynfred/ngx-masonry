@@ -114,7 +114,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
     if (this.ordered) {
       for (const [index, item] of this.pendingItems.entries()) {
         if (item) {
-          if (item.elements && item.elements.size === 0) {
+          if (item.images && item.images.size === 0) {
             this.pendingItems[index] = undefined;
             this.itemLoaded(item);
             if (index + 1 === this.pendingItems.length) {
