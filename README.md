@@ -129,6 +129,16 @@ You can create and set customized animations with this option.
   animations = {}
 ```
 
+### Image Lazyload
+When using any lazyload methods layout, you can add `masonryLazy` attribute to the images.
+
+Note: When using `masonryLazy`, the layout would have an overlapping issue. If you have this issue, you would need a custom method to maintain the layout, such as adding the fixed width/height to each image. For using the image lazyload method, you can have fallback image and loading indicator is recommended.
+
+Example:
+```html
+  <img masonryLazy loading="lazy" width="500px" height="300px"/>
+```
+
 ## Events
 
 ### layoutComplete: `EventEmitter<any[]>`

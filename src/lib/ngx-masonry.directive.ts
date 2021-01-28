@@ -47,12 +47,17 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.images = new Set(images);
       for (const imageRef of images) {
-        this.renderer.listen(imageRef, 'load', _ => {
-          this.imageLoaded(imageRef);
-        });
-        this.renderer.listen(imageRef, 'error', _ => {
-          this.imageLoaded(imageRef);
-        });
+        // skip image render check if image has `masonryLazy` attribute
+        if (imageRef.hasAttribute('masonryLazy')) {
+            this.imageLoaded(imageRef);
+        } else { 
+          this.renderer.listen(imageRef, 'load', _ => {
+            this.imageLoaded(imageRef);
+          });
+          this.renderer.listen(imageRef, 'error', _ => {
+            this.imageLoaded(imageRef);
+          });
+        }
       }
     }
   }
