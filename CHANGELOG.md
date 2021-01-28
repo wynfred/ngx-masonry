@@ -1,5 +1,9 @@
 # Change log
 
+## 10.1.0
+
+- option to disable image detection
+
 ## 10.0.6
 
 - fix object not iterable in SSR
