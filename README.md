@@ -129,6 +129,14 @@ You can create and set customized animations with this option.
   animations = {}
 ```
 
+Note that due to https://github.com/wynfred/ngx-masonry/issues/8 ngx-masonry comes without builtin animations of moving masonry items (when they change size or screen changes size). You can implement them using a css transition. Just add item css class let's say "masonry-item" and add this css code.
+
+```css
+.masonry-item {
+  transition: top 0.4s ease-in-out, left 0.4s ease-in-out;
+}
+```
+
 ### Image Lazyload
 When using any lazyload methods layout, you can add `masonryLazy` attribute to the images.
 
