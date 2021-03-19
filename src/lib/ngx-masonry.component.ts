@@ -133,18 +133,20 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private itemLoaded(item: NgxMasonryDirective) {
-    // Tell Masonry that a child element has been added
-    if (item.prepend) {
-      this.masonryInstance.prepended(item.element.nativeElement);
-    } else {
-      this.masonryInstance.appended(item.element.nativeElement);
+    if(isPlatformBrowser(this.platformId)){
+	// Tell Masonry that a child element has been added
+	  if (item.prepend) {
+	    this.masonryInstance.prepended(item.element.nativeElement);
+	 } else {
+	    this.masonryInstance.appended(item.element.nativeElement);
+    	}
+	    
+        // Check if first item
+        if (this.masonryInstance.items.length === 1) {
+           this.masonryInstance.layout();
+        }
+        item.playAnimation(true);
     }
-
-    // Check if first item
-    if (this.masonryInstance.items.length === 1) {
-      this.masonryInstance.layout();
-    }
-    item.playAnimation(true);
   }
 
   public remove(element: HTMLElement) {
