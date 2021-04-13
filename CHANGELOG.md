@@ -1,5 +1,9 @@
 # Change log
 
+## 11.0.1
+
+- extra SSR fix
+
 ## 10.1.0
 
 - option to disable image detection
