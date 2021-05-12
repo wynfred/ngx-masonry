@@ -1,5 +1,10 @@
 # Change log
 
+## 11.0.2
+
+- fix item missing when it doesn't contain image and has ordered mode enabled
+- remove unused import
+
 ## 11.0.1
 
 - extra SSR fix
