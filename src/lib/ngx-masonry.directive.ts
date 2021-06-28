@@ -9,6 +9,7 @@ import { NgxMasonryAnimations } from './ngx-masonry-options';
 })
 export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
   @Input() prepend = false;
+  @Input() ready = false;
 
   public images: Set<HTMLImageElement>;
   private animations: NgxMasonryAnimations = {
@@ -35,28 +36,33 @@ export class NgxMasonryDirective implements OnInit, OnDestroy, AfterViewInit {
     }
     this.renderer.setStyle(this.element.nativeElement, 'position', 'fixed');
     this.renderer.setStyle(this.element.nativeElement, 'right', '-150vw');
-    this.parent.addPendingItem(this);
+
+    if (!this.ready) {
+      this.parent.addPendingItem(this);
+    }
   }
 
   ngAfterViewInit() {
-    const images: HTMLImageElement[] = Array.from(this.element.nativeElement.getElementsByTagName('img'));
-    this.images = new Set(images);
-    if (images.length === 0) {
-      setTimeout(() => {
-        this.parent.add(this);
-      });
-    } else {
-      for (const imageRef of images) {
-        // skip image render check if image has `masonryLazy` attribute
-        if (imageRef.hasAttribute('masonryLazy')) {
-            this.imageLoaded(imageRef);
-        } else { 
-          this.renderer.listen(imageRef, 'load', _ => {
-            this.imageLoaded(imageRef);
-          });
-          this.renderer.listen(imageRef, 'error', _ => {
-            this.imageLoaded(imageRef);
-          });
+    if (!this.ready) {
+      const images: HTMLImageElement[] = Array.from(this.element.nativeElement.getElementsByTagName('img'));
+      this.images = new Set(images);
+      if (images.length === 0) {
+        setTimeout(() => {
+          this.parent.add(this);
+        });
+      } else {
+        for (const imageRef of images) {
+          // skip image render check if image has `masonryLazy` attribute
+          if (imageRef.hasAttribute('masonryLazy')) {
+              this.imageLoaded(imageRef);
+          } else { 
+            this.renderer.listen(imageRef, 'load', _ => {
+              this.imageLoaded(imageRef);
+            });
+            this.renderer.listen(imageRef, 'error', _ => {
+              this.imageLoaded(imageRef);
+            });
+          }
         }
       }
     }
