@@ -1,23 +1,10 @@
-import {
-  Component,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  OnDestroy,
-  Input,
-  Output,
-  ElementRef,
-  EventEmitter,
-  PLATFORM_ID,
-  Inject
-} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
+import { NgxMasonryOptions } from './ngx-masonry-options';
+import { NgxMasonryDirective } from './ngx-masonry.directive';
 
 declare var require: any;
 let masonryConstructor: any;
-
-import { NgxMasonryOptions } from './ngx-masonry-options';
-import { NgxMasonryDirective } from './ngx-masonry.directive';
 
 @Component({
   selector: '[ngx-masonry], ngx-masonry',
@@ -140,7 +127,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 	 } else {
 	    this.masonryInstance.appended(item.element.nativeElement);
     	}
-	    
+
         // Check if first item
         if (this.masonryInstance.items.length === 1) {
            this.masonryInstance.layout();
@@ -149,11 +136,13 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  public remove(element: HTMLElement) {
-    // Tell Masonry that a child element has been removed
-    this.masonryInstance.remove(element);
+	public remove(element: HTMLElement) {
+		if (isPlatformBrowser(this.platformId)) {
+			// Tell Masonry that a child element has been removed
+			this.masonryInstance.remove(element);
 
-    // Layout items
-    this.layout();
-  }
+			// Layout items
+			this.layout();
+		}
+	}
 }
