@@ -63,6 +63,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
       this.masonryInstance.on('removeComplete', (items: any) => {
         this.removeComplete.emit(items);
       });
+      this.masonryInstance.items=[];
     }
   }
 
@@ -121,28 +122,28 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 
   private itemLoaded(item: NgxMasonryDirective) {
     if(isPlatformBrowser(this.platformId)){
-	// Tell Masonry that a child element has been added
-	  if (item.prepend) {
-	    this.masonryInstance.prepended(item.element.nativeElement);
-	 } else {
-	    this.masonryInstance.appended(item.element.nativeElement);
-    	}
+      // Tell Masonry that a child element has been added
+      if (item.prepend) {
+        this.masonryInstance.prepended(item.element.nativeElement);
+      } else {
+        this.masonryInstance.appended(item.element.nativeElement);
+      }
 
-        // Check if first item
-        if (this.masonryInstance.items.length === 1) {
-           this.masonryInstance.layout();
-        }
-        item.playAnimation(true);
+      // Check if first item
+      if (this.masonryInstance.items.length === 1) {
+          this.masonryInstance.layout();
+      }
+      item.playAnimation(true);
     }
   }
 
-	public remove(element: HTMLElement) {
-		if (isPlatformBrowser(this.platformId)) {
-			// Tell Masonry that a child element has been removed
-			this.masonryInstance.remove(element);
+  public remove(element: HTMLElement) {
+    if (isPlatformBrowser(this.platformId)) {
+      // Tell Masonry that a child element has been removed
+      this.masonryInstance.remove(element);
 
-			// Layout items
-			this.layout();
-		}
-	}
+      // Layout items
+      this.layout();
+    }
+  }
 }

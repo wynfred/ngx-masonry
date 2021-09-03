@@ -1,5 +1,11 @@
 # Change log
 
+## 12.0.0
+
+- Angular 12 upgrade
+- fix space created by pre-loaded item
+- SSR check in `remove` function
+
 ## 11.0.2
 
 - fix item missing when it doesn't contain image and has ordered mode enabled
