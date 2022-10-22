@@ -1,5 +1,9 @@
 # Change log
 
+## 14.0.0
+
+- Angular 14 update and Ivy build
+
 ## 13.0.0
 
 - Remove Angular version limit
