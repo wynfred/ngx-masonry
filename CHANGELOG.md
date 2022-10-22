@@ -1,5 +1,9 @@
 # Change log
 
+## 13.0.0
+
+- Remove Angular version limit
+
 ## 12.0.0
 
 - Angular 12 upgrade
