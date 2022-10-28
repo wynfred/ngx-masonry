@@ -2,9 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, PLATFORM_ID, SimpleChanges } from '@angular/core';
 import { NgxMasonryOptions } from './ngx-masonry-options';
 import { NgxMasonryDirective } from './ngx-masonry.directive';
-
-declare var require: any;
-let masonryConstructor: any;
+import Masonry from 'masonry-layout';
 
 @Component({
   selector: '[ngx-masonry], ngx-masonry',
@@ -36,10 +34,6 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnInit() {
 
-    if (isPlatformBrowser(this.platformId) && masonryConstructor === undefined) {
-      masonryConstructor = require('masonry-layout');
-    }
-
     // Create masonry options object
     if (!this.options) {
       this.options = {};
@@ -54,7 +48,7 @@ export class NgxMasonryComponent implements OnInit, OnChanges, OnDestroy {
 
     if (isPlatformBrowser(this.platformId)) {
       // Initialize Masonry
-      this.masonryInstance = new masonryConstructor(this._element.nativeElement, this.options);
+      this.masonryInstance = new Masonry(this._element.nativeElement, this.options);
 
       // Bind to events
       this.masonryInstance.on('layoutComplete', (items: any) => {

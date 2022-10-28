@@ -1,5 +1,9 @@
 # Change log
 
+## 14.0.1
+
+- Use ES6 import for CJS module
+
 ## 14.0.0
 
 - Angular 14 update and Ivy build
